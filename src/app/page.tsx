@@ -24,7 +24,6 @@ export default function Home() {
         {/* Call to action */}
         <Link
           href="/dashboard"
-          target="_blank"
           className={buttonVariants({
             size: "lg",
             className: "mt-5",
