@@ -48,7 +48,7 @@ const Navbar = async () => {
                   Sign in
                 </LoginLink>
                 <RegisterLink
-                  postLoginRedirectURL="dashboard"
+                  postLoginRedirectURL="/dashboard"
                   className={buttonVariants({
                     size: "sm",
                   })}
