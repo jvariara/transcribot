@@ -96,7 +96,7 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-zinc-500">MP3 (up to {isSubscribed ? "8" : "32"}MB)</p>
+                <p className="text-xs text-zinc-500">MP3 (up to {isSubscribed ? "32" : "8"}MB)</p>
               </div>
 
               {/* preview of file */}

@@ -1,7 +1,15 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import UploadButton from "./UploadButton";
-import { Ghost, Loader2, MessageSquare, Plus, Trash } from "lucide-react";
+import {
+  Check,
+  Ghost,
+  Loader2,
+  MessageSquare,
+  Plus,
+  Trash,
+  XIcon,
+} from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import { format } from "date-fns";
@@ -10,7 +18,7 @@ import { useState } from "react";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 
 interface PageProps {
-  subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>
+  subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
 }
 
 const Dashboard = ({ subscriptionPlan }: PageProps) => {
@@ -80,8 +88,25 @@ const Dashboard = ({ subscriptionPlan }: PageProps) => {
                     {format(new Date(file.createdAt), "MMM dd yyyy")}
                   </div>
                   <div className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    {/* TODO: change this mocked */}5
+                    {file.uploadStatus === "SUCCESS" && (
+                      <>
+                        <Check className="h-4 w-4 text-green-500" />
+                        {file.uploadStatus}
+                      </>
+                    )}
+                    {file.uploadStatus === "FAILED" && (
+                      <>
+                        <XIcon className="h-4 w-4 text-red-500" />
+                        {file.uploadStatus}
+                      </>
+                    )}
+                    {file.uploadStatus === "PROCESSING" ||
+                      (file.uploadStatus === "PENDING" && (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          {file.uploadStatus}
+                        </>
+                      ))}
                   </div>
 
                   <Button
