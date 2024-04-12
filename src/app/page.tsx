@@ -24,6 +24,7 @@ export default function Home() {
         {/* Call to action */}
         <Link
           href="/dashboard"
+          target="_blank"
           className={buttonVariants({
             size: "lg",
             className: "mt-5",
@@ -51,7 +52,6 @@ export default function Home() {
           </div>
 
           {/* preview image */}
-          {/* TODO: Replace with image */}
           <div>
             <div className="mx-auto max-w-6xl px-6 lg:px-8">
               <div className="mt-16 flow-root sm:mt-24">

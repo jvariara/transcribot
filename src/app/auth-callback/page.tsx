@@ -4,8 +4,8 @@ import { Loader2 } from "lucide-react";
 import { trpc } from "../_trpc/client";
 
 const Page = () => {
+  console.log("AUTH CALLBACKKKKK")
   const router = useRouter();
-
   const searchParams = useSearchParams();
   const origin = searchParams.get("origin");
 
