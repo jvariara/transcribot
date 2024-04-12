@@ -9,6 +9,7 @@ import MaxWidthWrapper from "../MaxWidthWrapper";
 import { buttonVariants } from "../ui/button";
 import UserAccountNav from "./UserAccountNav";
 import MobileNav from "./MobileNav";
+import Image from "next/image";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
@@ -18,7 +19,8 @@ const Navbar = async () => {
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-          <Link href="/" className="flex z-40 font-semibold">
+          <Link href="/" className="flex z-40 font-semibold items-center">
+            <Image src="/icon.png" alt="icon" height={40} width={40} className="aspect-square object-contain mr-3" />
             <span>transcribot.</span>
           </Link>
 
