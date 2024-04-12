@@ -19,6 +19,7 @@ const nextConfig = {
       config.resolve.alias.encoding = false;
       return config;
     },
+    externals: [/node-modules/, 'bufferutil', 'utf-8-validate']
   };
   
   export default nextConfig;

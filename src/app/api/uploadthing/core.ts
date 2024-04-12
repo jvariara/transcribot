@@ -5,8 +5,36 @@ import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { transcriber } from "@/lib/transcriber";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import * as mm from 'music-metadata'
+import fs from "fs"
+import fetch from "node-fetch"
  
 const f = createUploadthing();
+
+async function getAudioDurationFromURL(url: string) {
+  try {
+      // Download the audio file
+      const response = await fetch(url);
+      const buffer = await response.buffer();
+
+      // Write the downloaded buffer to a temporary file
+      const tempFilePath = './temp_audio.mp3'; // You may want to use a unique filename
+      fs.writeFileSync(tempFilePath, buffer);
+
+      // Extract duration from the temporary file
+      const metadata = await mm.parseFile(tempFilePath);
+      const duration = metadata.format.duration;
+
+      // Remove the temporary file
+      fs.unlinkSync(tempFilePath);
+
+      return duration;
+  } catch (error: any) {
+      console.error('Error getting audio duration:', error.message);
+      return null;
+  }
+}
+
 
 const middleware = async() => {
   // This code runs on your server before upload
@@ -50,12 +78,9 @@ const onUploadComplete = async({metadata, file}: {
       // get subscription plan of user
       const {subscriptionPlan} = metadata
       const {isSubscribed} = subscriptionPlan
-      // get length of mp3 file
-      const audio = new Audio()
-      let audioDuration
-      audio.addEventListener('loadedmetadata', () => {
-        audioDuration = audio.duration
-      })
+
+      // Load the audio file 
+      const audioDuration = await getAudioDurationFromURL(file.url)
 
       const isFreeExceeded = (audioDuration! / 60) > PLANS.find((plan) => plan.name === "Free")!.minutesPerMP3
       const isProExceeded = (audioDuration! / 60) > PLANS.find((plan) => plan.name === "Pro")!.minutesPerMP3
@@ -85,8 +110,6 @@ const onUploadComplete = async({metadata, file}: {
       //   model: "whisper-1",
       // })
 
-      console.log(transcript)
-
       await db.transcript.create({
         data: {
           text: transcript.text as string,
@@ -104,6 +127,7 @@ const onUploadComplete = async({metadata, file}: {
         },
       })
     } catch (error) {
+      console.log("ERRORRRR ", error)
       await db.file.update({
         where: {
           id: createdFile.id
