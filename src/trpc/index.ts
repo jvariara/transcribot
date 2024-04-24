@@ -75,6 +75,22 @@ export const appRouter = router({
 
       if (!file) throw new TRPCError({ code: "NOT_FOUND" });
 
+      // delete from transcript table
+      const transcript = await db.transcript.findFirst({
+        where: {
+          fileId: file.id
+        }
+      })
+
+      if(transcript) {
+        await db.transcript.delete({
+          where: {
+            id: transcript.id,
+            fileId: file.id
+          }
+        })
+      }
+      
       // delete from db
       await db.file.delete({
         where: {
@@ -82,12 +98,14 @@ export const appRouter = router({
         },
       });
 
+
       // delete from uploadthing
       const utapi = new UTApi({
         fetch: globalThis.fetch,
         apiKey: process.env.UPLOADTHING_SECRET
       })
       await utapi.deleteFiles(file.key)
+
 
       return file;
     }),

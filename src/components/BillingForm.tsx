@@ -74,7 +74,7 @@ const BillingForm = ({
                   : 'Your plan renews on '}
                 {format(
                   subscriptionPlan.stripeCurrentPeriodEnd!,
-                  'dd.MM.yyyy'
+                  'MM/dd/yyyy'
                 )}
                 .
               </p>
